@@ -1,89 +1,93 @@
+/* Reset & Base */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-body {
-    background: #121212;
-    color: #fff;
-    min-height: 100vh;
-    overflow: hidden;
-}
-
-.logo {
-    position: absolute;
-    top: 2rem;
-    left: 2rem;
-    font-size: 2rem;
-    background: linear-gradient(45deg, #00A8E8, #9D00FF);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 0 15px rgba(157, 0, 255, 0.5));
-    z-index: 3;
-}
-
-.visualizer-container {
-    position: relative;
-    width: 100vw;
-    height: 100vh;
+body, html {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  font-family: 'Orbitron', sans-serif;
+  background: radial-gradient(ellipse at center, #1a1a2e 0%, #0f0f1e 100%);
+  color: #ffffff;
 }
 
 canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
 }
 
-.upload-section {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    z-index: 2;
+/* Overlay UI */
+.overlay {
+  position: absolute;
+  z-index: 10;
+  width: 100%;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  backdrop-filter: blur(10px);
+  background: rgba(18, 18, 34, 0.4);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.05);
 }
 
-.upload-btn {
-    background: linear-gradient(135deg, #00A8E8 0%, #9D00FF 100%);
-    border: none;
-    padding: 1.5rem 3rem;
-    color: white;
-    font-size: 1.2rem;
-    border-radius: 50px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 0 25px rgba(0, 168, 232, 0.3);
+.title {
+  font-size: 2.5rem;
+  color: #00ff85;
+  text-shadow: 0 0 10px #00ff85;
+  letter-spacing: 2px;
 }
 
-.upload-btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 35px rgba(157, 0, 255, 0.5);
+.controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
 }
 
-.tagline {
-    margin-top: 2rem;
-    font-size: 1.5rem;
-    color: #00FF85;
-    text-shadow: 0 0 15px rgba(0, 255, 133, 0.3);
+.upload-label {
+  background: #00ff85;
+  color: #121212;
+  padding: 10px 20px;
+  border-radius: 40px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 0 20px #00ff85;
 }
 
-.gradient-bg {
-    position: fixed;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, 
-        rgba(0,168,232,0.1) 0%, 
-        rgba(157,0,255,0.05) 30%, 
-        rgba(0,33,64,0) 70%);
-    animation: move 20s infinite alternate;
-    z-index: 1;
+.upload-label:hover {
+  background: #00e27a;
 }
 
-@keyframes move {
-    0% { transform: translate(0, 0); }
-    100% { transform: translate(50px, 50px); }
+#file-input {
+  display: none;
+}
+
+.buttons {
+  display: flex;
+  gap: 10px;
+}
+
+button {
+  background: transparent;
+  color: #ffffff;
+  border: 2px solid #00ff85;
+  padding: 8px 20px;
+  border-radius: 40px;
+  cursor: pointer;
+  transition: 0.3s ease;
+  font-weight: bold;
+  box-shadow: 0 0 10px #00ff85;
+}
+
+button:hover {
+  background: #00ff85;
+  color: #121212;
 }

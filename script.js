@@ -1,8 +1,11 @@
 const canvas = document.getElementById('visualizer');
 const ctx = canvas.getContext('2d');
-let audioContext, analyser, dataArray;
+const playBtn = document.getElementById('play-btn');
+const pauseBtn = document.getElementById('pause-btn');
 
-// Initialize canvas size
+let audioContext, analyser, dataArray, audio;
+let isPlaying = false;
+
 function initCanvas() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
@@ -11,10 +14,8 @@ initCanvas();
 
 window.addEventListener('resize', () => {
     initCanvas();
-    drawVisualizer();
 });
 
-// Audio processing setup
 function setupAudioContext(audioElement) {
     audioContext = new (window.AudioContext || window.webkitAudioContext)();
     analyser = audioContext.createAnalyser();
@@ -22,52 +23,61 @@ function setupAudioContext(audioElement) {
 
     source.connect(analyser);
     analyser.connect(audioContext.destination);
-    analyser.fftSize = 256;
 
+    analyser.fftSize = 128;
     dataArray = new Uint8Array(analyser.frequencyBinCount);
 }
 
-// Visualization drawing logic
-function drawVisualizer() {
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = '#00FF85';
-    ctx.beginPath();
+function drawBars() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    analyser.getByteFrequencyData(dataArray);
 
-    const sliceWidth = canvas.width / dataArray.length;
+    const barWidth = canvas.width / dataArray.length;
     let x = 0;
 
-    for(let i = 0; i < dataArray.length; i++) {
-        const v = dataArray[i] / 128.0;
-        const y = v * canvas.height / 2;
+    for (let i = 0; i < dataArray.length; i++) {
+        const barHeight = dataArray[i];
+        const r = 50 + barHeight * 2;
+        const g = 255;
+        const b = 133;
 
-        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-        x += sliceWidth;
+        ctx.fillStyle = `rgb(${r},${g},${b})`;
+        ctx.shadowBlur = 20;
+        ctx.shadowColor = `rgb(${r},${g},${b})`;
+        ctx.fillRect(x, canvas.height - barHeight, barWidth - 2, barHeight);
+        x += barWidth;
     }
-
-    ctx.stroke();
 }
 
-// Visualization render loop
 function animate() {
-    ctx.fillStyle = '#121212';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    analyser.getByteFrequencyData(dataArray);
-    drawVisualizer();
+    if (!isPlaying) return;
+    drawBars();
     requestAnimationFrame(animate);
 }
 
-// File input handling
 document.getElementById('file-input').addEventListener('change', function(e) {
     const file = e.target.files[0];
     if (!file) return;
 
     const reader = new FileReader();
     reader.onload = function(e) {
-        const audio = new Audio(e.target.result);
+        if (audio) audio.pause();
+
+        audio = new Audio(e.target.result);
         setupAudioContext(audio);
-        audio.play();
-        animate();
     };
     reader.readAsDataURL(file);
+});
+
+playBtn.addEventListener('click', () => {
+    if (!audio) return;
+    audio.play();
+    isPlaying = true;
+    animate();
+});
+
+pauseBtn.addEventListener('click', () => {
+    if (!audio) return;
+    audio.pause();
+    isPlaying = false;
 });
