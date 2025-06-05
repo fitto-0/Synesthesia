@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Synesthesia</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="logo">
+        <svg width="120" height="120" viewBox="0 0 120 120">
+            <path fill="url(#gradient)" d="M60 15a45 45 0 1 0 0 90 45 45 0 0 0 0-90zm0 15a30 30 0 0 1 0 60 30 30 0 0 1 0-60z"/>
+            <text x="50%" y="60%" dominant-baseline="middle" text-anchor="middle" 
+                  fill="url(#gradient)" font-size="24" font-weight="bold">S</text>
+            <defs>
+                <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#00A8E8"/>
+                    <stop offset="100%" stop-color="#9D00FF"/>
+                </linearGradient>
+            </defs>
+        </svg>
+    </div>
+
+
+    <div class="gradient-bg"></div>
+    
+    <div class="visualizer-container">
+        <canvas id="visualizer"></canvas>
+        <div class="upload-section">
+            <button class="upload-btn" onclick="document.getElementById('file-input').click()">
+                Upload Your Song
+            </button>
+            <p class="tagline">Watch the Music Come Alive</p>
+        </div>
+    </div>
+
+    <input type="file" id="file-input" hidden accept="audio/*">
+    
+    <script src="script.js"></script>
+</body>
+</html>
