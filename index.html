@@ -17,9 +17,18 @@
         <button id="play-btn">▶ Play</button>
         <button id="pause-btn">⏸ Pause</button>
       </div>
+      <div class="spotify-section">
+        <button id="connect-spotify">Connect Spotify</button>
+        <div id="spotify-ui" class="hidden">
+          <input type="text" id="search-input" placeholder="Search songs..." />
+          <ul id="results"></ul>
+        </div>
+      </div>
+      <div id="lyrics-container" class="lyrics"></div>
     </div>
   </div>
   <canvas id="visualizer"></canvas>
   <script src="script.js"></script>
+  <script src="spotify.js"></script>
 </body>
 </html>

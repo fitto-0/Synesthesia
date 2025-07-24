@@ -66,6 +66,17 @@ document.getElementById('file-input').addEventListener('change', function(e) {
         audio = new Audio(e.target.result);
         setupAudioContext(audio);
     };
+
+    // Allow external modules (e.g., spotify.js) to set audio source
+    window.setAudioSource = function(url) {
+        if (audio) audio.pause();
+        audio = new Audio(url);
+        setupAudioContext(audio);
+        // Auto-play for seamless UX
+        audio.play();
+        isPlaying = true;
+        animate();
+    };
     reader.readAsDataURL(file);
 });
 
