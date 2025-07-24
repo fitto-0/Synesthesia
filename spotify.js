@@ -144,9 +144,6 @@ function renderResults(tracks) {
         playFullTrack(t.uri);
         fetchLyrics(t.artists[0].name, t.name);
       });
-    } else {
-      li.className = "result-item no-preview";
-      li.title = "Preview not available (requires Spotify Premium).";
     }
     resultsList.appendChild(li);
   });
