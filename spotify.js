@@ -122,6 +122,12 @@ function renderResults(tracks) {
         window.setAudioSource(t.preview_url);
         fetchLyrics(t.artists[0].name, t.name);
       });
+    } else if (deviceId) {
+      li.className = "result-item";
+      li.addEventListener("click", () => {
+        playFullTrack(t.uri);
+        fetchLyrics(t.artists[0].name, t.name);
+      });
     } else {
       li.className = "result-item no-preview";
       li.title = "Preview not available (requires Spotify Premium).";
