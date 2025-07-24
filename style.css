@@ -91,3 +91,19 @@ button:hover {
   background: #00ff85;
   color: #121212;
 }
+
+.result-item {
+  transition: 0.3s ease;
+  font-weight: bold;
+  box-shadow: 0 0 10px #00ff85;
+}
+
+.result-item.no-preview {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.result-item:hover {
+  background: #00ff85;
+  color: #121212;
+}

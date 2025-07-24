@@ -4,10 +4,16 @@
 
 const CLIENT_ID = "149d1486759143098b62ee98ddade209";
 const REDIRECT_URI = "https://synesthesia-music.netlify.app/";
-const SCOPES = ["user-read-private", "streaming"].join(" ");
+const SCOPES = [
+  "user-read-private",
+  "streaming",
+  "user-read-playback-state",
+  "user-modify-playback-state"
+].join(" ");
 
 const connectBtn = document.getElementById("connect-spotify");
-const spotifyUI = document.getElementById("spotify-ui");
+const searchArea = document.getElementById("search-area");
+const toggleBtn = document.getElementById("toggle-lyrics");
 const searchInput = document.getElementById("search-input");
 const resultsList = document.getElementById("results");
 const lyricsContainer = document.getElementById("lyrics-container");
@@ -102,18 +108,24 @@ async function searchTracks(query) {
 
 function renderResults(tracks) {
   resultsList.innerHTML = "";
+  if (!tracks.length) {
+    resultsList.innerHTML = "<li>No tracks found.</li>";
+    return;
+  }
+  resultsList.innerHTML = "";
   tracks.forEach((t) => {
     const li = document.createElement("li");
     li.textContent = `${t.name} – ${t.artists[0].name}`;
-    li.className = "result-item";
-    li.addEventListener("click", () => {
-      if (t.preview_url) {
+    if (t.preview_url) {
+      li.className = "result-item";
+      li.addEventListener("click", () => {
         window.setAudioSource(t.preview_url);
         fetchLyrics(t.artists[0].name, t.name);
-      } else {
-        alert("No preview available for this track.");
-      }
-    });
+      });
+    } else {
+      li.className = "result-item no-preview";
+      li.title = "Preview not available (requires Spotify Premium).";
+    }
     resultsList.appendChild(li);
   });
 }
@@ -161,11 +173,49 @@ searchInput.addEventListener("keyup", async (e) => {
   const q = e.target.value.trim();
   if (q.length < 3) {
     resultsList.innerHTML = "";
+    resultsList.style.animation = "fadeIn 0.4s ease";
     return;
   }
   const tracks = await searchTracks(q);
   renderResults(tracks);
 });
+
+// ---------- Web Playback SDK ----------
+let player;
+let deviceId;
+function initPlaybackSDK(token) {
+  if (player) return; // already
+  if (!window.Spotify) return; // SDK not yet loaded
+  player = new Spotify.Player({
+    name: "Synesthesia Player",
+    getOAuthToken: (cb) => cb(token),
+    volume: 0.8,
+  });
+  player.addListener('ready', ({ device_id }) => {
+    deviceId = device_id;
+    console.log('Player ready with device', device_id);
+  });
+  player.addListener('not_ready', ({ device_id }) => {
+    console.log('Device ID has gone offline', device_id);
+  });
+  player.connect();
+}
+
+function playFullTrack(uri) {
+  const token = getToken();
+  if (!token || !deviceId) {
+    alert('Full track playback requires Spotify Premium and a connected player.');
+    return;
+  }
+  fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
+    method: 'PUT',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ uris: [uri] })
+  });
+}
 
 // ---------- Init on load ----------
 (async () => {

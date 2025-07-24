@@ -19,9 +19,10 @@
       </div>
       <div class="spotify-section">
         <button id="connect-spotify">Connect Spotify</button>
-        <div id="spotify-ui" class="hidden">
-          <input type="text" id="search-input" placeholder="Search songs..." />
+        <div id="search-area" class="requires-auth hidden">
+          <input type="text" id="search-input" placeholder="Search by song or artist..." />
           <ul id="results"></ul>
+          <button id="toggle-lyrics" class="hidden">Show Lyrics</button>
         </div>
       </div>
       <div id="lyrics-container" class="lyrics"></div>
@@ -29,6 +30,7 @@
   </div>
   <canvas id="visualizer"></canvas>
   <script src="script.js"></script>
+  <script src="https://sdk.scdn.co/spotify-player.js"></script>
   <script src="spotify.js"></script>
 </body>
 </html>
