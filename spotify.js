@@ -139,11 +139,6 @@ function renderResults(tracks) {
           li.title = "Preview not available";
         }
       })();
-      li.className = "result-item";
-      li.addEventListener("click", () => {
-        playFullTrack(t.uri);
-        fetchLyrics(t.artists[0].name, t.name);
-      });
     }
     resultsList.appendChild(li);
   });
