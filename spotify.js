@@ -122,7 +122,23 @@ function renderResults(tracks) {
         window.setAudioSource(t.preview_url);
         fetchLyrics(t.artists[0].name, t.name);
       });
-    } else if (deviceId) {
+    } else {
+      // Try YouTube fallback
+      li.className = "result-item";
+      (async () => {
+        const yt = await searchYouTube(`${t.name} ${t.artists[0].name}`);
+        if (yt.length) {
+          const vid = yt[0].id.videoId;
+          li.addEventListener("click", () => {
+            playYouTube(vid);
+            fetchLyrics(t.artists[0].name, t.name);
+          });
+          li.title = "Playing via YouTube (visualiser disabled)";
+        } else {
+          li.className = "result-item no-preview";
+          li.title = "Preview not available";
+        }
+      })();
       li.className = "result-item";
       li.addEventListener("click", () => {
         playFullTrack(t.uri);
